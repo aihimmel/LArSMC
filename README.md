@@ -14,8 +14,17 @@
 
 ### How to Run (on a dunegpvm)
 
+First, you need to start up an SL7 container:
 ```
-source /grid/fermiapp/products/dune/setup_dune.sh
+/cvmfs/oasis.opensciencegrid.org/mis/apptainer/current/bin/apptainer shell --shell=/bin/bash \
+-B /cvmfs,/exp,/nashome,/pnfs/dune,/opt,/run/user,/etc/hostname,/etc/hosts,/etc/krb5.conf --ipc --pid \
+/cvmfs/singularity.opensciencegrid.org/fermilab/fnal-dev-sl7:latest
+```
+
+Then, inside the container, run the following setup:
+```
+export UPS_OVERRIDE="-H Linux64bit+3.10-2.17"
+source /cvmfs/dune.opensciencegrid.org/products/dune/setup_dune.sh
 setup -B geant4 v4_10_6_p01c -q+e20:prof
 setup -B root v6_20_08a -q+e20:p383b:prof
 setup -B cmake v3_19_6
@@ -23,11 +32,11 @@ export CXX=`which g++`
 export CC=`which gcc`
 export G4INSTALL=/cvmfs/larsoft.opensciencegrid.org/products/geant4/v4_10_6_p01/Linux64bit+2.6-2.12-e19-prof
 export G4DIR=$G4INSTALL/lib64
- 
-cd <build directory>
+
+cd <build directory> # Suggest placing outside the repo directory
 cmake -DGeant4_DIR=$G4DIR <repo>/srcs -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON
  
 make clean ; make -j 8
  
-./TBMC -g ../srcs/gdml/lars_tallbo_true.gdml -m ./vis.mac -o larsmc_90cm.root | tee log_90cm.txt
+./TBMC -g <repo>/srcs/gdml/lars_tallbo_true.gdml -m ./vis.mac -o larsmc_90cm.root | tee log_90cm.txt
 ```
