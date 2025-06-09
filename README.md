@@ -40,3 +40,36 @@ make clean ; make -j 8
  
 ./TBMC -g <repo>/srcs/gdml/lars_tallbo_true.gdml -m ./vis.mac -o larsmc_90cm.root | tee log_90cm.txt
 ```
+
+### How to visualize a geometry
+
+```
+std::string testfile = "simple.gdml"
+gSystem->Load("libGeom");
+gSystem->Load("libGdml");
+TGeoManager::Import(testfile.c_str());
+gGeoManager->GetTopVolume()->Draw("ogl");
+```
+
+### How to submit via justIN
+
+(WORK IN PROGRESS!)
+
+Link to the general justiN documentation: https://justin.dune.hep.ac.uk/docs/overview.md
+
+Get the environment for submission set up:
+```
+/cvmfs/dune.opensciencegrid.org/products/dune/justin/justin-sl7-setup
+source /cvmfs/dune.opensciencegrid.org/products/dune/setup_dune.sh
+setup python  v3_9_15          # ≥3.8 avoids the unlink() issue
+setup justin
+justin time
+justin get-token
+```
+
+Next, upload the build directory to the RCDS service so the executable can be accessed on the grid node:
+
+```
+INPUT_TAR_DIR=$(<repo>/justin/rcds_prep.sh <build directory>)
+```
+
