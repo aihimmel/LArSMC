@@ -65,6 +65,10 @@ foreach(_script ${TBMC_SCRIPTS})
     COPYONLY )
 endforeach()
 
+# Copy the gdml directory to the build directory so that geometry files
+# are available alongside the executable.
+file(COPY ${PROJECT_SOURCE_DIR}/gdml DESTINATION ${PROJECT_BINARY_DIR})
+
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
