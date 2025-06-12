@@ -12,7 +12,7 @@
 
 
 
-### How to Run (on a dunegpvm)
+### How to Build and Run (on a dunegpvm)
 
 First, you need to start up an SL7 container:
 ```
@@ -32,9 +32,10 @@ export CXX=`which g++`
 export CC=`which gcc`
 export G4INSTALL=/cvmfs/larsoft.opensciencegrid.org/products/geant4/v4_10_6_p01/Linux64bit+2.6-2.12-e19-prof
 export G4DIR=$G4INSTALL/lib64
+export LARS=<repo>
 
 cd <build directory> # Suggest placing outside the repo directory
-cmake -DGeant4_DIR=$G4DIR <repo>/srcs -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON
+cmake -DGeant4_DIR=$G4DIR $LARS/srcs -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON
  
 make clean ; make -j 8
  
@@ -43,6 +44,7 @@ make clean ; make -j 8
 
 ### How to visualize a geometry
 
+Here's how to do it in root, but it doesn't work with our GDML files since they use loops.
 ```
 std::string testfile = "simple.gdml"
 gSystem->Load("libGeom");
