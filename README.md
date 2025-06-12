@@ -59,19 +59,36 @@ gGeoManager->GetTopVolume()->Draw("ogl");
 
 Link to the general justiN documentation: https://justin.dune.hep.ac.uk/docs/overview.md
 
-Get the environment for submission set up:
+Get the environment for submission set up -- note this is _not_ inside the SL7 container
 ```
-/cvmfs/dune.opensciencegrid.org/products/dune/justin/justin-sl7-setup
-source /cvmfs/dune.opensciencegrid.org/products/dune/setup_dune.sh
-setup python  v3_9_15          # ≥3.8 avoids the unlink() issue
-setup justin
+source /cvmfs/larsoft.opensciencegrid.org/spack-packages/setup-env.sh
+spack load justin
 justin time
 justin get-token
 ```
 
-Next, upload the build directory to the RCDS service so the executable can be accessed on the grid node:
+Next, upload the build directory to the RCDS service so the executable can be accessed on the grid node.
 
 ```
 INPUT_TAR_DIR=$(<repo>/justin/rcds_prep.sh <build directory>)
 ```
 
+You can run a local test by doing the following:
+```
+justin-test-jobscript --monte-carlo 1 \
+                      --jobscript lars_mc_test.jobscript \
+                      --env INPUT_TAR_DIR="$INPUT_TAR_DIR" \
+                      --env NUM_EVENTS=1 \
+                      --env GDML=tallbo_h90_r90.gdml
+```
+
+
+To actually submit to the grid, do:
+```
+justin simple-workflow --image fnal-wn-sl7:latest  \
+                       --monte-carlo 10 \
+                       --jobscript lars_mc_test.jobscript \
+                       --env INPUT_TAR_DIR="$INPUT_TAR_DIR" \
+                       --env NUM_EVENTS=10000 \
+                       --env GDML=tallbo_h90_r90.gdml
+```
