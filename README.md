@@ -78,7 +78,6 @@ You can run a local test by doing the following:
 justin-test-jobscript --monte-carlo 1 \
                       --jobscript lars_mc_test.jobscript \
                       --env INPUT_TAR_DIR="$INPUT_TAR_DIR" \
-                      --env NUM_EVENTS=1 \
                       --env GDML=tallbo_h90_r90.gdml
 ```
 
@@ -89,6 +88,5 @@ justin simple-workflow --image fnal-wn-sl7:latest  \
                        --monte-carlo 10 \
                        --jobscript lars_mc_test.jobscript \
                        --env INPUT_TAR_DIR="$INPUT_TAR_DIR" \
-                       --env NUM_EVENTS=10000 \
                        --env GDML=tallbo_h90_r90.gdml
 ```

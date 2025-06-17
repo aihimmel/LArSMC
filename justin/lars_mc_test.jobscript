@@ -38,9 +38,9 @@ if [[ ! -f "$LARSMC_HOME/gdml/$GDML" ]]; then
 fi
 
 echo "Running TBMC"
-echo $EXE -g $LARSMC_HOME/gdml/$GDML -m $LARSMC_HOME/vis.mac -o larsmc_test.root #-n "${NUM_EVENTS:-100}" 
+echo $EXE -g $LARSMC_HOME/gdml/$GDML -m $LARSMC_HOME/vis.mac -o larsmc_test.root
 
-$EXE -g $LARSMC_HOME/gdml/$GDML -m $LARSMC_HOME/vis.mac -o larsmc_test.root #-n "${NUM_EVENTS:-100}" 
+$EXE -g $LARSMC_HOME/gdml/$GDML -m $LARSMC_HOME/vis.mac -o larsmc_test.root
 
 # --- Check if the output file was created -------------------------------------
 if [[ ! -f "larsmc_test.root" ]]; then
