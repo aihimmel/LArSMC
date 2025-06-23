@@ -4,6 +4,19 @@
 #set -euo pipefail
 echo "Node $(hostname)  —  start $(date)"
 
+# --- Check that INPUT_TAR_DIR is set -----------------------------------
+if [[ -z "${INPUT_TAR_DIR:-}" ]]; then
+    echo "ERROR: INPUT_TAR_DIR environment variable is not set" >&2
+    exit 101
+fi
+
+echo "INPUT_TAR_DIR: $INPUT_TAR_DIR"
+
+if [[ ! -d "$INPUT_TAR_DIR" ]]; then
+    echo "ERROR: INPUT_TAR_DIR is set but directory does not exist" >&2
+    exit 102
+fi
+
 export UPS_OVERRIDE="-H Linux64bit+3.10-2.17"
 source /cvmfs/dune.opensciencegrid.org/products/dune/setup_dune.sh
 setup -B geant4 v4_10_6_p01c -q+e20:prof
@@ -14,13 +27,30 @@ export CC=`which gcc`
 export G4INSTALL=/cvmfs/larsoft.opensciencegrid.org/products/geant4/v4_10_6_p01/Linux64bit+2.6-2.12-e19-prof
 export G4DIR=$G4INSTALL/lib64
 
-export LARSMC_HOME="$INPUT_TAR_DIR"     # injected by justIN
+export LARSMC_HOME="$INPUT_TAR_DIR"
 export LD_LIBRARY_PATH="$LARSMC_HOME/lib:$LD_LIBRARY_PATH"
 
 EXE="$LARSMC_HOME/TBMC"
 
-# --- Determine which MC job this is -----------------------------------
+# --- Environment validation ------------------------------------------------
+echo "=== Environment Check ==="
+echo "Hostname: $(hostname)"
+echo "Working directory: $(pwd)"
+echo "User: $(whoami)"
+echo "Available memory: $(free -h | grep '^Mem:' || echo 'unknown')"
+echo "CPU info: $(nproc) cores"
+echo "Load average: $(uptime)"
+echo "=========================="
+
+# --- Determine which MC job this is ---------------------------------------
 did_pfn_rse=`$JUSTIN_PATH/justin-get-file`
+
+# Check if no input files are available
+if [[ -z "$did_pfn_rse" ]]; then
+    echo "No input files available - exiting successfully"
+    exit 0
+fi
+
 did=`echo $did_pfn_rse | cut -f1 -d' '`
 pfn=`echo $did_pfn_rse | cut -f2 -d' '`
 rse=`echo $did_pfn_rse | cut -f3 -d' '`
@@ -54,7 +84,7 @@ else
         for i in "${!gdml_files[@]}"; do
             echo "  PFN $((i+1)): ${gdml_files[$i]}" >&2
         done
-        exit 1
+        exit 103
     fi
 
     # Select GDML file (array is 0-indexed, pfn starts at 1)
@@ -65,34 +95,137 @@ else
     echo "Selected GDML: $GDML"
 fi
 
-
 echo "Completed setup"
+echo "Working directory: $(pwd)"
+echo "Available disk space:"
+df -h .
+
+# --- Set output filename based on GDML unique identifier -------------------
+# Extract the unique part from the GDML filename (e.g., "h2d22" from "lars_tallbo_true_h2d22_v2.gdml")
+gdml_uid=$(echo "$GDML" | sed 's/lars_tallbo_true_\(.*\)_v2\.gdml/\1/')
+OUTPUT_FILENAME="larsmc_${gdml_uid}.root"
+OTHER_FILES_TAR="otherfiles_${gdml_uid}.tgz"
+
+echo "GDML unique ID: $gdml_uid"
+echo "Output filename: $OUTPUT_FILENAME"
+echo "Other files archive: $OTHER_FILES_TAR"
 
 # --- Check that LARSMC_HOME has TBMC executable --------------------------------
 if [[ ! -x "$EXE" ]]; then
     echo "ERROR: LARSMC_HOME does not contain LArSMC executable" >&2
-    exit 1
+    echo "Expected executable at: $EXE" >&2
+    echo "Current contents of LARSMC_HOME:" >&2
+    ls -l $LARSMC_HOME >&2
+    exit 104
 fi
 
 # --- Check that GDML file exists -----------------------------------------------
 if [[ -z "${GDML:-}" ]]; then
     echo "ERROR: GDML environment variable is not set" >&2
-    exit 1
+    exit 105
 fi
 if [[ ! -f "$LARSMC_HOME/gdml/$GDML" ]]; then
-    echo "ERROR: GDML file $GDML not found in $LARSMC_HOME/gdml/" >&2
-    exit 1
+    echo "ERROR: GDML file $GDML not found in LARSMC_HOME/gdml/" >&2
+    echo "Current contents of $LARSMC_HOME/gdml:" >&2
+    ls -l $LARSMC_HOME/gdml >&2
+    exit 106
+fi
+
+# --- Check if we have enough time left (assuming we know wall time limit) ---
+if [[ -n "${JUSTIN_WALL_SECONDS:-}" ]]; then
+    start_time=$(date +%s)
+    echo "Job started at timestamp: $start_time"
+    echo "Wall time limit: ${JUSTIN_WALL_SECONDS} seconds"
+    
+    # Reserve some time for cleanup and output
+    reserved_time=300  # 5 minutes
+    max_sim_time=$((JUSTIN_WALL_SECONDS - reserved_time))
+    echo "Maximum simulation time: $max_sim_time seconds"
 fi
 
 echo "Running TBMC"
-echo $EXE -g $LARSMC_HOME/gdml/$GDML -m $LARSMC_HOME/vis.mac -o larsmc_test.root
+echo $EXE -g $LARSMC_HOME/gdml/$GDML -m $LARSMC_HOME/vis.mac -o $OUTPUT_FILENAME
 
-$EXE -g $LARSMC_HOME/gdml/$GDML -m $LARSMC_HOME/vis.mac -o larsmc_test.root
+# --- Run the actual simulation -------------------------------------------------
+$EXE -g $LARSMC_HOME/gdml/$GDML -m $LARSMC_HOME/vis.mac -o $OUTPUT_FILENAME
+exit_code=$?
+echo "TBMC simulation completed at $(date) with exit code $exit_code"
+
+# --- Check if simulation succeeded ---------------------------------------------
+if [[ $exit_code -ne 0 ]]; then
+    echo "ERROR: TBMC simulation failed with exit code $exit_code" >&2
+    exit $exit_code
+fi
 
 # --- Check if the output file was created -------------------------------------
-if [[ ! -f "larsmc_test.root" ]]; then
-    echo "ERROR: Output file larsmc_test.root was not created" >&2
-    exit 1
+if [[ ! -f "$OUTPUT_FILENAME" ]]; then
+    echo "ERROR: Output file $OUTPUT_FILENAME was not created" >&2
+    echo "Current directory contents:" >&2
+    ls -l >&2
+    exit 107
+fi
+
+# --- Validate output file -----------------------------------------------------
+output_size=$(stat -c%s "$OUTPUT_FILENAME" 2>/dev/null || echo "0")
+if [[ $output_size -lt 1024 ]]; then
+    echo "WARNING: Output file $OUTPUT_FILENAME is very small ($output_size bytes)"
+    echo "This might indicate a problem with the simulation"
+fi
+
+echo "Output file validation:"
+echo "  File: $OUTPUT_FILENAME"
+echo "  Size: $output_size bytes ($(du -h $OUTPUT_FILENAME | cut -f1))"
+echo "  Type: $(file $OUTPUT_FILENAME 2>/dev/null || echo 'unknown')"
+
+# --- Record successful processing of the Monte Carlo counter file -------------
+echo "$did" >> justin-processed-dids.txt
+echo "Successfully processed Monte Carlo counter: $did"
+
+# --- Create archive of other files ---------------------------------------------
+echo "Creating archive of other files..."
+echo "Files in working directory before archiving:"
+ls -la
+
+# Create list of files to exclude from tarball (not just the main output)
+exclude_patterns=(
+    "$OUTPUT_FILENAME"
+    "justin-processed-dids.txt"
+    "core.*"
+    "*.tmp"
+)
+
+# Build exclude arguments for tar
+exclude_args=()
+for pattern in "${exclude_patterns[@]}"; do
+    exclude_args+=(--exclude="$pattern")
+done
+
+# Create tarball with selective exclusions
+if tar "${exclude_args[@]}" -czf "$OTHER_FILES_TAR" * 2>/dev/null; then
+    echo "Created other files archive: $OTHER_FILES_TAR"
+    echo "Archive size: $(du -h $OTHER_FILES_TAR | cut -f1)"
+else
+    echo "WARNING: Failed to create other files archive or no files to archive"
+fi
+
+# --- Resource Usage Summary ---
+echo "=== Resource Usage Summary ==="
+echo "Peak memory usage:"
+if command -v ps >/dev/null 2>&1; then
+    ps -o pid,vsz,rss,comm -p $$
+fi
+echo "Final disk usage:"
+du -sh .
+echo "Final disk space:"
+df -h .
+echo "==============================="
+
+# --- Print elapsed time and remaining wall time -------------------------------
+if [[ -n "${JUSTIN_WALL_SECONDS:-}" ]]; then
+    end_time=$(date +%s)
+    elapsed_time=$((end_time - start_time))
+    echo "Simulation took $elapsed_time seconds"
+    echo "Remaining time: $((JUSTIN_WALL_SECONDS - elapsed_time)) seconds"
 fi
 
 echo "Node $(hostname)  —  end $(date)"
