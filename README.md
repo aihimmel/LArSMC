@@ -21,7 +21,7 @@ First, you need to start up an SL7 container:
 /cvmfs/singularity.opensciencegrid.org/fermilab/fnal-dev-sl7:latest
 ```
 
-Then, inside the container, run the following setup:
+This is the required environment setup, it has now been captured in the `setup_lars.sh` script.
 ```
 export UPS_OVERRIDE="-H Linux64bit+3.10-2.17"
 source /cvmfs/dune.opensciencegrid.org/products/dune/setup_dune.sh
@@ -32,18 +32,36 @@ export CXX=`which g++`
 export CC=`which gcc`
 export G4INSTALL=/cvmfs/larsoft.opensciencegrid.org/products/geant4/v4_10_6_p01/Linux64bit+2.6-2.12-e19-prof
 export G4DIR=$G4INSTALL/lib64
+```
+
+Then, inside the container, run the following setup:
+```
 export LARS=<repo>
+export BUILD=$LARS/../larsmc-build
 
 # Configure
-cd <build directory> # Suggest placing outside the repo directory
+cd $BUILD # Suggest placing outside the repo directory
 cmake -DGeant4_DIR=$G4DIR $LARS/srcs -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON -g Ninja
  
 # Build
 ninja -j 8
 
 # Run example
-./TBMC -g <repo>/srcs/gdml/lars_tallbo_true.gdml -m ./vis.mac -o larsmc_90cm.root | tee log_90cm.txt
+./TBMC -g ./gdml/lars_tallbo_true.gdml -m ./vis.mac -o larsmc_90cm.root | tee log_90cm.txt
 ```
+
+Alternatively, the scripts `cmake_in_container.sh` and `ninja_in_container.sh` automate the configuring and building inside the container. Here's how that would look:
+
+```
+export LARS=<repo>
+export BUILD=$LARS/../larsmc-build
+$LARS/scripts/cmake_in_container.sh -DGeant4_DIR=$ENV{G4DIR} -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON --no-warn-unused-cli -S$LARS/srcs -B$BUILD -G Ninja
+cd $BUILD # Suggest placing outside the repo directory
+$LARS/scripts/ninja_in_container.sh
+
+./TBMC -g ./gdml/lars_tallbo_true.gdml -m ./vis.mac -o larsmc_90cm.root | tee log_90cm.txt
+```
+
 
 ### How to visualize a geometry
 

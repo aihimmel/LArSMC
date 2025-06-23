@@ -1,0 +1,13 @@
+{
+    "cmake.cmakePath": "${workspaceFolder}/scripts/cmake_in_container.sh",
+    "cmake.sourceDirectory": "${workspaceFolder}/srcs",
+    "cmake.buildDirectory": "${workspaceFolder}/../larsmc-build/",
+    "cmake.generator": "Ninja",
+    "cmake.configureArgs": [
+        "-DGeant4_DIR=$ENV{G4DIR}",
+        "-DGEANT4_INSTALL_DATA=ON",
+        "-DGEANT4_USE_OPENGL_X11=ON"
+    ],
+    "cmake.buildToolArgs": ["-j", "$(nproc)"],
+    "cmake.configureOnOpen": true
+}
