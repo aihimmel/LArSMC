@@ -88,16 +88,17 @@ justin time
 justin get-token
 ```
 
-Next, upload the build directory to the RCDS service so the executable can be accessed on the grid node.
-
+Next, upload the build directory to the RCDS service so the executable can be accessed on the grid node. You may need to wait a few minutes for the files to be visible in CVMFS.
 ```
 INPUT_TAR_DIR=$($LARS/justin/rcds_prep.sh $BUILD)
+export INPUT_TAR_DIR
+ls $INPUT_TAR_DIR
 ```
 
 You can run a local test by doing the following:
 ```
 justin-test-jobscript --monte-carlo 1 \
-                      --jobscript lars_mc_test.jobscript \
+                      --jobscript lars_mc_onepergdml.jobscript \
                       --env INPUT_TAR_DIR="$INPUT_TAR_DIR" \
                       --scope usertests
 ```
@@ -106,9 +107,15 @@ justin-test-jobscript --monte-carlo 1 \
 To actually submit to the grid, do:
 ```
 justin simple-workflow --image fnal-wn-sl7:latest  \
-                       --monte-carlo 10 \
-                       --jobscript lars_mc_test.jobscript \
-                       --env INPUT_TAR_DIR="$INPUT_TAR_DIR" \
-                       --scope usertests                       
-
+                       --name larsmc-test-$(date +%Y%m%d%H%M) \
+                       --monte-carlo 6 \
+                       --jobscript lars_mc_onepergdml.jobscript \
+                       --env INPUT_TAR_DIR=$INPUT_TAR_DIR \
+                       --scope usertests \
+                       --output-pattern "larsmc_*.root:$USERURL/$USER/justin" \
+                       --output-pattern "otherfiles_*.tgz:$USERURL/$USER/justin" # Remove if you only care about the MC output            
+```
+or, run
+```
+scripts/justin_submission_example.sh
 ```

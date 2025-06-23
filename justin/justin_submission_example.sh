@@ -9,9 +9,9 @@ if [[ -z "${INPUT_TAR_DIR:-}" ]]; then
 fi
 
 justin simple-workflow --image fnal-wn-sl7:latest  \
-                       --name larsmc-test-$(date +%Y%m%d%H%M) \
+                       --name larsmc-onepergdml-$(date +%Y%m%d%H%M) \
                        --monte-carlo 6 \
-                       --jobscript lars_mc_test.jobscript \
+                       --jobscript lars_mc_onepergdml.jobscript \
                        --env INPUT_TAR_DIR=$INPUT_TAR_DIR \
                        --scope usertests \
                        --output-pattern "larsmc_*.root:$USERURL/$USER/justin" \
