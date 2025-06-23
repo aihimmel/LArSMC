@@ -19,6 +19,53 @@ export LD_LIBRARY_PATH="$LARSMC_HOME/lib:$LD_LIBRARY_PATH"
 
 EXE="$LARSMC_HOME/TBMC"
 
+# --- Determine which MC job this is -----------------------------------
+did_pfn_rse=`$JUSTIN_PATH/justin-get-file`
+did=`echo $did_pfn_rse | cut -f1 -d' '`
+pfn=`echo $did_pfn_rse | cut -f2 -d' '`
+rse=`echo $did_pfn_rse | cut -f3 -d' '`
+
+echo "did=$did"
+echo "pfn=$pfn"
+echo "rse=$rse"
+
+# --- Set the GDML based on the number in PFN -----------------------------
+# Check if GDML is already set
+if [[ -n "${GDML:-}" ]]; then
+    echo "GDML already set to: $GDML"
+else
+    # Extract the number from pfn (assuming pfn is just an integer)
+    pfn_number=$pfn
+
+    # Hard-coded list of GDML files in order
+    declare -a gdml_files=(
+        "lars_tallbo_true_h2d22_v2.gdml"
+        "lars_tallbo_true_h25d34_v2.gdml"
+        "lars_tallbo_true_h50d97_v2.gdml"
+        "lars_tallbo_true_h76d33_v2.gdml"
+        "lars_tallbo_true_h101d83_v2.gdml"
+        "lars_tallbo_true_h127d22_v2.gdml"
+    )
+
+    # Check if PFN number is valid
+    if [[ $pfn_number -lt 1 || $pfn_number -gt ${#gdml_files[@]} ]]; then
+        echo "ERROR: PFN number $pfn_number is out of range. Must be between 1 and ${#gdml_files[@]}." >&2
+        echo "Available GDML files: ${#gdml_files[@]}" >&2
+        for i in "${!gdml_files[@]}"; do
+            echo "  PFN $((i+1)): ${gdml_files[$i]}" >&2
+        done
+        exit 1
+    fi
+
+    # Select GDML file (array is 0-indexed, pfn starts at 1)
+    gdml_index=$((pfn_number - 1))
+    export GDML=${gdml_files[$gdml_index]}
+
+    echo "PFN number: $pfn_number"
+    echo "Selected GDML: $GDML"
+fi
+
+
 echo "Completed setup"
 
 # --- Check that LARSMC_HOME has TBMC executable --------------------------------

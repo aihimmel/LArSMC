@@ -34,11 +34,14 @@ export G4INSTALL=/cvmfs/larsoft.opensciencegrid.org/products/geant4/v4_10_6_p01/
 export G4DIR=$G4INSTALL/lib64
 export LARS=<repo>
 
+# Configure
 cd <build directory> # Suggest placing outside the repo directory
-cmake -DGeant4_DIR=$G4DIR $LARS/srcs -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON
+cmake -DGeant4_DIR=$G4DIR $LARS/srcs -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_OPENGL_X11=ON -g Ninja
  
-make clean ; make -j 8
- 
+# Build
+ninja -j 8
+
+# Run example
 ./TBMC -g <repo>/srcs/gdml/lars_tallbo_true.gdml -m ./vis.mac -o larsmc_90cm.root | tee log_90cm.txt
 ```
 
@@ -70,7 +73,7 @@ justin get-token
 Next, upload the build directory to the RCDS service so the executable can be accessed on the grid node.
 
 ```
-INPUT_TAR_DIR=$(<repo>/justin/rcds_prep.sh <build directory>)
+INPUT_TAR_DIR=$($LARS/justin/rcds_prep.sh $BUILD)
 ```
 
 You can run a local test by doing the following:
@@ -78,7 +81,7 @@ You can run a local test by doing the following:
 justin-test-jobscript --monte-carlo 1 \
                       --jobscript lars_mc_test.jobscript \
                       --env INPUT_TAR_DIR="$INPUT_TAR_DIR" \
-                      --env GDML=tallbo_h90_r90.gdml
+                      --scope usertests
 ```
 
 
@@ -88,5 +91,6 @@ justin simple-workflow --image fnal-wn-sl7:latest  \
                        --monte-carlo 10 \
                        --jobscript lars_mc_test.jobscript \
                        --env INPUT_TAR_DIR="$INPUT_TAR_DIR" \
-                       --env GDML=tallbo_h90_r90.gdml
+                       --scope usertests                       
+
 ```
