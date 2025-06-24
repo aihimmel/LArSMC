@@ -4,9 +4,9 @@
 
   *Maintainer*:               A. Himmel  <ahimmel@fnal.gov>
   
-  *Authors*:                  W. Mu, L. Zhao, W. Castiglioni, F. Yu
+  *Authors*:                  A. Breaux, W. Mu, L. Zhao, W. Castiglioni, F. Yu
   
-  *Last update to this document*:  February 2024
+  *Last update to this document*:  June 2025
 
 ----------------------------------------------------------------------
 
