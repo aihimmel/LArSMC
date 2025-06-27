@@ -3,6 +3,7 @@
 #include "TBMC_PrimaryGeneratorAction.hh"
 #include "TBMC_RunAction.hh"
 #include "TBMC_SteppingAction.hh"
+#include "TBMC_TrackingAction.hh"
 
 TBMC_ActionInitialization::TBMC_ActionInitialization()
   : G4VUserActionInitialization()
@@ -23,4 +24,6 @@ void TBMC_ActionInitialization::Build() const
     TBMC_EventAction* event = new TBMC_EventAction();
     SetUserAction(event);
     SetUserAction(new TBMC_SteppingAction(event));
+    TBMC_TrackingAction* track = new TBMC_TrackingAction();
+    SetUserAction(track);
 }

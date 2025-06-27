@@ -3,18 +3,22 @@
 
 #include "globals.hh"
 #include "G4Run.hh"
+#include "G4ThreeVector.hh"
+
 #include "TFile.h"
 #include "TTree.h"
 
-using namespace std;
+#include <vector>
 
+using namespace std;
 
 class TBMC_Analysis 
 {
 private:
     static TBMC_Analysis* fInstance;  
     TFile* fOutputFile;
-    TTree* fAnaTree;  
+    TTree* fEventTree;
+    TTree* fTrackTree;
 
 public:
     TBMC_Analysis();
@@ -26,11 +30,18 @@ public:
     void EndOfRun();
     void BeginOfEvent();
     void EndOfEvent();
+    void BeginOfTrack();
+    // void EndOfTrack();       // Not needed for analysis right now.
     void Reset();
     void bookTree();
   
     std::string fKillVolName;
     std::string fProcessName;
+
+    G4double init_x;
+    G4double init_y;
+    G4double init_z;
+    G4double init_energy; 
        
     G4int fopDetID;
     G4int fnAbsorb;
@@ -38,7 +49,7 @@ public:
     
     G4double fStepLength;
     G4double fabsLengthLAr;     //Predefined value, absorption length of VUV light in LAr
-    G4double fRayleighLength;   //manually give rayleigh length to vuv photons. rayleigh length for visible photons is calculated according to theo.
+    G4double fRayleighLength;   //Manually give rayleigh length to vuv photons. Rayleigh length for visible photons is calculated according to theo.
     G4double fLArLevel;         //Predefined value, liquid level, in cm, above the upper edge of WLS' upper edge
 };
 #endif

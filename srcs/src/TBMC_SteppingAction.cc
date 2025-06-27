@@ -78,7 +78,7 @@ void TBMC_SteppingAction::opPhoton_DoIt(const G4Step* step)
     {
         return;
     }
-    
+
     absProc_DoIt(step);
     scattProc_DoIt(step);
     boundaryProc_DoIt(step);

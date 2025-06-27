@@ -10,8 +10,14 @@ TBMC_Analysis::TBMC_Analysis()
     fabsLengthLAr    = 10;
     fRayleighLength  = 10;
     fLArLevel        = 10;
+
+    init_x = 0.;
+    init_y = 0.;
+    init_z = 0.;
+    init_energy = 0.;
     
-    fAnaTree    = NULL;
+    fEventTree  = NULL;
+    fTrackTree  = NULL;
     fOutputFile = NULL;
 
     bookTree();
@@ -43,9 +49,12 @@ void TBMC_Analysis::BeginOfRun()
 
 void TBMC_Analysis::EndOfRun()
 {
-    fAnaTree->Write();
+    fEventTree->Write();
+    fTrackTree->Write();
+
     fOutputFile->cd();
     fOutputFile->Close();
+
     return;
 }
 
@@ -57,7 +66,13 @@ void TBMC_Analysis::BeginOfEvent()
 
 void TBMC_Analysis::EndOfEvent()
 {
-    fAnaTree->Fill();
+    fEventTree->Fill();
+    return;
+}
+
+void TBMC_Analysis::BeginOfTrack()
+{
+    fTrackTree->Fill();
     return;
 }
 
@@ -78,22 +93,37 @@ void TBMC_Analysis::bookTree()
 {
     G4cout<<"Booking tree .... "<<G4endl;
     if(!fOutputFile) fOutputFile = NULL;
-  
     if(fFilename=="")
     {
         fFilename="./ana.root";
     }
-    G4cout<<"Creating tree  "<<fFilename<<G4endl;
-    fOutputFile = new TFile(fFilename, "RECREATE");
-    fAnaTree    = new TTree("TBMC", "TBMC");
+    G4cout<<"Creating tree "<<fFilename<<G4endl;
 
-    fAnaTree->Branch("KillVol",    &fKillVolName);
-    fAnaTree->Branch("Process",    &fProcessName);
-    fAnaTree->Branch("OpDet",      &fopDetID);
-    fAnaTree->Branch("Rayleigh",   &fnRayleigh);
-    fAnaTree->Branch("Absorption", &fnAbsorb);
-    fAnaTree->Branch("StepLength", &fStepLength);
+    fOutputFile = new TFile(fFilename, "RECREATE");
+    fEventTree  = new TTree("EventTree", "EventTree");
+    fTrackTree  = new TTree("TrackTree", "TrackTree");
+
+    fEventTree->Branch("KillVol",    &fKillVolName);
+    fEventTree->Branch("Process",    &fProcessName);
+    fEventTree->Branch("OpDet",      &fopDetID);
+    fEventTree->Branch("Rayleigh",   &fnRayleigh);
+    fEventTree->Branch("Absorption", &fnAbsorb);
+    fEventTree->Branch("StepLength", &fStepLength);
+
+    fTrackTree->Branch("InitialX",      &init_x);
+    fTrackTree->Branch("InitialY",      &init_y);
+    fTrackTree->Branch("InitialZ",      &init_z);
+    fTrackTree->Branch("InitialEnergy", &init_energy);
         
     fOutputFile->cd();
     return;
 }
+
+// MISC.//
+
+// This function can be used to extract end-of-track data when necessary:
+
+// void TBMC_Analysis::EndOfTrack()
+// {
+//     return;
+// }

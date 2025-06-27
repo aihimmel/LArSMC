@@ -1,8 +1,16 @@
 #include "TBMC_PrimaryGeneratorAction.hh"
 #include "G4Event.hh"
+
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
+
+#include "G4ParticleGun.hh"
+#include "G4GeneralParticleSource.hh"
+ #include "G4SingleParticleSource.hh"
+  #include "G4SPSAngDistribution.hh"
+  #include "G4SPSPosDistribution.hh"
+  #include "G4SPSEneDistribution.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
@@ -16,6 +24,8 @@ TBMC_PrimaryGeneratorAction::TBMC_PrimaryGeneratorAction()
     G4ParticleDefinition* particle = particleTable->FindParticle("opticalphoton");
     
     fParticleSource->SetParticleDefinition(particle);
+
+    ConfigureGPS();
 }
 
 TBMC_PrimaryGeneratorAction::~TBMC_PrimaryGeneratorAction()
@@ -32,6 +42,31 @@ void TBMC_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
     fParticleSource->GeneratePrimaryVertex(anEvent);
     
+    return;
+}
+
+void TBMC_PrimaryGeneratorAction::ConfigureGPS()
+{
+    // General Configuration
+    fParticleSource->SetCurrentSourceIntensity(1.);
+
+    // Position Configuration
+    auto PosDist = fParticleSource->GetCurrentSource()->GetPosDist();
+    PosDist->SetPosDisType("Plane");
+    PosDist->SetPosDisShape("Square");
+    PosDist->SetCentreCoords(G4ThreeVector(8.75 * cm, 0. * cm, 84.5 * cm));
+    PosDist->SetHalfX(0.23 * cm);
+    PosDist->SetHalfY(0.23 * cm);
+
+    // Angle Configuration
+    auto AngDist = fParticleSource->GetCurrentSource()->GetAngDist();
+    AngDist->SetParticleMomentumDirection(G4ThreeVector(0, 0, -1));
+
+    // Energy Configuration
+    auto EneDist = fParticleSource->GetCurrentSource()->GetEneDist();
+    EneDist->SetEnergyDisType("Mono");
+    EneDist->SetMonoEnergy(0.0096 * keV);
+
     return;
 }
 

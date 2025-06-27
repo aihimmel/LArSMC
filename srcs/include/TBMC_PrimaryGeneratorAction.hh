@@ -21,6 +21,8 @@ public:
     G4GeneralParticleSource* GetParticleSource() { return fParticleSource; }
 
 private:
+    void ConfigureGPS();
+
     G4GeneralParticleSource* fParticleSource;
 };
 #endif
