@@ -15,7 +15,7 @@ public:
     ~TBMC_TrackingAction() override;
 
     void PreUserTrackingAction (const G4Track*) override;
-    // void PostUserTrackingAction (const G4Track*) override;   // Not presently needed.
+    void PostUserTrackingAction (const G4Track*) override;
 
 private:
     TBMC_Analysis* fAna;

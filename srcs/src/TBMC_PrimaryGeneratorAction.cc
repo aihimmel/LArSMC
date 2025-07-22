@@ -6,10 +6,6 @@
 
 #include "G4ParticleGun.hh"
 #include "G4GeneralParticleSource.hh"
- #include "G4SingleParticleSource.hh"
-  #include "G4SPSAngDistribution.hh"
-  #include "G4SPSPosDistribution.hh"
-  #include "G4SPSEneDistribution.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -54,18 +50,18 @@ void TBMC_PrimaryGeneratorAction::ConfigureGPS()
     auto PosDist = fParticleSource->GetCurrentSource()->GetPosDist();
     PosDist->SetPosDisType("Plane");
     PosDist->SetPosDisShape("Square");
-    PosDist->SetCentreCoords(G4ThreeVector(8.75 * cm, 0. * cm, 84.5 * cm));
-    PosDist->SetHalfX(0.23 * cm);
-    PosDist->SetHalfY(0.23 * cm);
+    PosDist->SetCentreCoords(G4ThreeVector(8.75 *cm, 0. *cm, 84.5 *cm));
+    PosDist->SetHalfX(0.23 *cm);
+    PosDist->SetHalfY(0.23 *cm);
 
     // Angle Configuration
     auto AngDist = fParticleSource->GetCurrentSource()->GetAngDist();
     AngDist->SetParticleMomentumDirection(G4ThreeVector(0, 0, -1));
 
     // Energy Configuration
-    auto EneDist = fParticleSource->GetCurrentSource()->GetEneDist();
-    EneDist->SetEnergyDisType("Mono");
-    EneDist->SetMonoEnergy(0.0096 * keV);
+    // auto EneDist = fParticleSource->GetCurrentSource()->GetEneDist();
+    // EneDist->SetEnergyDisType("Mono");
+    // EneDist->SetMonoEnergy(6.888 *eV);
 
     return;
 }

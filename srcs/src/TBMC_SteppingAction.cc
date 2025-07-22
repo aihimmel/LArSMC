@@ -44,6 +44,7 @@ void TBMC_SteppingAction::absProc_DoIt(const G4Step* step)
     fAna->fnAbsorb++;
     
     fEventAction->AddAbsorption();
+
     return;
 }
 
@@ -98,16 +99,6 @@ void TBMC_SteppingAction::opPhoton_DoIt(const G4Step* step)
     
 //    stepVerboseInfo(step);
     
-    if(isVolume("volTank", step) || isVolume("volCage",step))
-    {
-        fAna->fKillVolName = (std::string)volName;
-        fAna->fStepLength  = stepLen;
-        fAna->fopDetID     = 9; //It is not detected by any optial detector
-
-        step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
-        return;
-    }
-    
     if(isVolume("volOpDet", step))
     {
         int nPos_1 = volName.find("_");
@@ -115,13 +106,23 @@ void TBMC_SteppingAction::opPhoton_DoIt(const G4Step* step)
         G4String opDetIDstr = volName(nPos_1+1, nPos_2-nPos_1-1);
         int    opDetID      = atoi(opDetIDstr.data());
         
-        fAna->fKillVolName = (std::string)volName;
         fAna->fStepLength  = stepLen;
         fAna->fopDetID     = opDetID;
         
         step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
         return;
     }
+
+
+    if(isVolume("volTank", step) || isVolume("volCage, step"))
+    {
+        fAna->fStepLength  = stepLen;
+        fAna->fopDetID     = 9; //It is not detected by any optial detector
+
+        step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+        return;
+    }
+
     
     return;
 }

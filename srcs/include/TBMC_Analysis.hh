@@ -31,25 +31,30 @@ public:
     void BeginOfEvent();
     void EndOfEvent();
     void BeginOfTrack();
-    // void EndOfTrack();       // Not needed for analysis right now.
+    void EndOfTrack();
     void Reset();
     void bookTree();
   
-    std::string fKillVolName;
     std::string fProcessName;
 
     G4double init_x;
     G4double init_y;
     G4double init_z;
-    G4double init_energy; 
+    G4double init_energy;
+
+    G4double fin_x;
+    G4double fin_y;
+    G4double fin_z;
+    G4double fin_r_squared;     // This is the r^2 value from the reference point (8.75, 0) in cm
+    G4double fin_volume;
        
     G4int fopDetID;
     G4int fnAbsorb;
     G4int fnRayleigh;
     
     G4double fStepLength;
-    G4double fabsLengthLAr;     //Predefined value, absorption length of VUV light in LAr
-    G4double fRayleighLength;   //Manually give rayleigh length to vuv photons. Rayleigh length for visible photons is calculated according to theo.
-    G4double fLArLevel;         //Predefined value, liquid level, in cm, above the upper edge of WLS' upper edge
+    G4double fabsLengthLAr;     // Predefined value, absorption length of VUV light in LAr
+    G4double fRayleighLength;   // Manually give rayleigh length to vuv photons. Rayleigh length for visible photons is calculated according to theo.
+    G4double fLArLevel;         // Predefined value, liquid level, in cm, above the upper edge of WLS' upper edge
 };
 #endif

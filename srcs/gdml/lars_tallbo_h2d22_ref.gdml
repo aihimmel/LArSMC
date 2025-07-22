@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd" -->
+
+<gdml_simple_extension xmlns:gdml_simple_extension="http://www.example.org"
+         		       xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"          
+		               xs:noNamespaceSchemaLocation="./SimpleExtensionSchema/SimpleExtension.xsd"> 
+
+  <extension>
+    <color name="tank_color"  R="0.9"  G="0.06"  B="0.1"  A="0.1" />	
+    <color name="cage_color"  R="0.9"  G="0.06"  B="0.8"  A="0.2" />	
+    <color name="sipm_color"  R="0.9"  G="0.9"  B="0.05"  A="1.0" />	
+    <color name="GAr_color"  R="0.06"  G="0.9"  B="0.1"  A="0.5" />	
+    <color name="LAr_color"  R="0.06"  G="0.4"  B="0.9"  A="1.0" />	
+  </extension>
+
+  <define>
+    <matrix coldim="2" name="LARRAYLEIGH"  values="20.664*eV 4.212*cm 10.332*eV 67.392*cm 9.919*eV 79.3458*cm 9.611*eV 90*cm 9.184*eV 107.949*cm 8.856*eV 124.852*cm 8.7*eV 134.012*cm 8.551*eV 143.667*cm 8.266*eV 164.531*cm 7.999*eV 187.59*cm 7.749*eV 212.992*cm 7.514*eV 240.89*cm 7.293*eV 271.443*cm 7.085*eV 304.815*cm 6.888*eV 341.172*cm 6.7*eV 380.689*cm"/>
+    <matrix coldim="2" name="LARABSLENGTH" values="1.0*eV 100.*m 2.0*eV 100.*m 3.0*eV 100.*m 4.0*eV 100.*m 5.0*eV 100.*m 6.0*eV 100.*m 7.0*eV 100.*m 8.0*eV 100.*m 9.0*eV 100.*m 10.0*eV 100.*m 11.0*eV 100.*m"/>
+    <matrix coldim="2" name="LARRINDEX" values="9.686*eV 1.358"/>
+    <matrix coldim="2" name="GARRAYLEIGH"  values="1.0*eV 100.*m 2.0*eV 100.*m 3.0*eV 100.*m 4.0*eV 100.*m 5.0*eV 100.*m 6.0*eV 100.*m 7.0*eV 100.*m 8.0*eV 100.*m 9.0*eV 100.*m 10.0*eV 100.*m 11.0*eV 100.*m"/>
+    <matrix coldim="2" name="GARABSLENGTH" values="1.0*eV 100.*m 2.0*eV 100.*m 3.0*eV 100.*m 4.0*eV 100.*m 5.0*eV 100.*m 6.0*eV 100.*m 7.0*eV 100.*m 8.0*eV 100.*m 9.0*eV 100.*m 10.0*eV 100.*m 11.0*eV 100.*m"/>
+    <matrix coldim="2" name="MATRINDEX" values="1.0*eV 1. 2.0*eV 1. 3.0*eV 1. 4.0*eV 1. 5.0*eV 1. 6.0*eV 1. 7.0*eV 1. 8.0*eV 1. 9.0*eV 1. 10.0*eV 1. 11.0*eV 1."/>
+    <matrix coldim="2" name="CAGEREFLECTIVITY" values="9.686*eV 0.75 6.888*eV 0.75"/>
+    <matrix coldim="2" name="CAGEABSORPTION" values="9.686*eV 0.25 6.888*eV 0.25"/>
+
+    <variable name="RTank" value="30"/>
+    <variable name="HTank" value="170."/>
+    <variable name="RCage" value="29.6"/>
+    <variable name="HCage" value="169.6"/>
+    <variable name="RGAr"  value="29.5"/>
+    <variable name="HGAr"  value="169.4"/>
+    <variable name="RLAr"  value="29.5"/>
+    <variable name="HLAr"  value="2.22"/>
+    
+    <!--matrix coldim="1" name="sidz"  values="-HCage/2.0+20.5 -HCage/2.0+39.5 -HCage/2.0+117.8 -HCage/2.0+129.5 -HCage/2.0+160 -HCage/2.0+162.7  -HCage/2.0+165.3"/ -->
+    <matrix coldim="1" name="sidz"  values="-64.3 -53.8 -45.3 33.0 44.7 75.2 77.9 80.5"/>
+    <variable name="sidx" value="0.0"/>
+    <variable name="sidy" value="14.3"/>
+
+    <!--variable name="btmz" value="-HCage/2.0+0.05"/-->
+    <variable name="btmz" value="-84.75"/>
+    <variable name="btmx" value="8.75"/>
+    <matrix coldim="1" name="btmy" values="-0.31 0.31"/>
+    
+    <variable name="index" value="0"/>
+    <variable name="liqsipnum"  value="2"/>
+    <variable name="gassipnum"  value="3"/>
+    
+    <position unit="cm" name="posCage" x="0.0" y="0.0" z="0.0"/>
+    <position unit="cm" name="posGAr"  x="0.0" y="0.0" z="0.0"/>
+    <position unit="cm" name="posLAr"  x="0.0" y="0.0" z="(HLAr-HGAr)/2.0"/>
+       
+    <position name="center"/>
+    <rotation name="identity"/>    
+    <constant name="TWOPI" value="2.*pi"/>
+    
+  </define>
+
+  <materials>
+    <element name="silicon" formula="Si" Z="14"> <atom value="28.0855"/>  </element>
+    <element name="carbon" formula="C" Z="6">  <atom value="12.0107"/>  </element>
+    <element name="chromium" formula="Cr" Z="24"> <atom value="51.9961"/>  </element>
+    <element name="iron" formula="Fe" Z="26"> <atom value="55.8450"/>  </element>
+    <element name="nickel" formula="Ni" Z="28"> <atom value="58.6934"/>  </element>
+    <element name="nitrogen" formula="N" Z="7">  <atom value="14.0067"/> </element>
+    <element name="oxygen" formula="O" Z="8">  <atom value="15.999"/> </element>
+    <element name="argon" formula="Ar" Z="18"> <atom value="39.9480"/>  </element>
+  
+    <material name="SI" formula="SILICON_Si">
+     <property name="RINDEX"  ref="MATRINDEX"/>
+     <D value="2.3300" unit="g/cm3"/>
+     <fraction n="1.0000" ref="silicon"/>
+    </material>
+    
+    <material name="LAr" formula="LAr" opticalproperties="LAr_refraction">
+     <property name="ABSLENGTH" ref="LARABSLENGTH"/>
+     <property name="RAYLEIGH"  ref="LARRAYLEIGH"/>
+     <property name="RINDEX"    ref="LARRINDEX"/>
+     <D value="1.40" unit="g/cm3"/>
+     <fraction n="1.000" ref="argon"/>
+    </material>
+    
+    <material name="GAr" formula="GAr">
+      <property name="ABSLENGTH" ref="GARABSLENGTH"/>
+      <property name="RAYLEIGH"  ref="GARRAYLEIGH"/>
+      <property name="RINDEX"    ref="MATRINDEX"/>
+      <D value="0.00166"/>
+      <fraction ref="argon" n="1.0"/>
+    </material>
+    
+    <material name="steel_stainless" formula="STEEL_STAINLESS_Fe7Cr2Ni">
+     <property name="RINDEX"  ref="MATRINDEX"/>
+     <D value="7.9300" unit="g/cm3"/>
+     <fraction n="0.0010" ref="carbon"/>
+     <fraction n="0.1792" ref="chromium"/>
+     <fraction n="0.7298" ref="iron"/>
+     <fraction n="0.0900" ref="nickel"/>
+    </material>
+    
+    <material formula="Air" name="Air">
+     <D value="0.001205" unit="g/cm3"/>
+     <fraction n="0.781154" ref="nitrogen"/>
+     <fraction n="0.209476" ref="oxygen"/>
+     <fraction n="0.00934" ref="argon"/>
+    </material>  </materials>
+
+  <solids>
+    <tube name="World" lunit="cm" aunit="radian" rmin="0.0" rmax="30.0"  z="180.0" startphi="0.0" deltaphi="TWOPI"/>
+    <tube name="Tank"  lunit="cm" aunit="radian" rmin="0.0" rmax="RTank" z="HTank" startphi="0.0" deltaphi="TWOPI"/>
+    <tube name="Cage"  lunit="cm" aunit="radian" rmin="0.0" rmax="RCage" z="HCage" startphi="0.0" deltaphi="TWOPI"/>
+    <tube name="GAr"   lunit="cm" aunit="radian" rmin="0.0" rmax="RGAr"  z="HGAr"  startphi="0.0" deltaphi="TWOPI"/>
+    <tube name="LAr"   lunit="cm" aunit="radian" rmin="0.0" rmax="RLAr"  z="HLAr"  startphi="0.0" deltaphi="TWOPI"/>
+    <box name="SiPM_BTM" lunit="cm" x="0.6" y="0.6" z="0.1"/>
+    <box name="SiPM_SID" lunit="cm" x="0.6" y="0.1" z="0.6"/>
+    <opticalsurface name="volCage_Interior" model="0" finish="ground" type="dielectric_metal" value="1">
+        <property name="REFLECTIVITY" ref="CAGEREFLECTIVITY"/>
+        <property name="ABSORPTION" ref="CAGEABSORPTION"/>
+    </opticalsurface>
+  </solids>
+  
+  <structure>
+    <loop for="index" from="1" to="2" step="1">
+      <volume name="volOpDet[index]">
+        <materialref ref="SI"/>
+        <solidref ref="SiPM_BTM"/>
+        <colorref ref="sipm_color"/> 
+      </volume>
+    </loop>
+    <loop for="index" from="3" to="10" step="1">
+      <volume name="volOpDet[index]">
+        <materialref ref="SI"/>
+        <solidref ref="SiPM_SID"/>
+        <colorref ref="sipm_color"/>         
+      </volume>
+    </loop>
+    
+    <volume name="volLAr">
+      <materialref ref="LAr"/>
+      <solidref ref="LAr"/>
+      <colorref ref="LAr_color"/> 
+    </volume>
+    
+    <volume name="volGAr">
+      <materialref ref="GAr"/>
+      <solidref ref="GAr"/>
+      <colorref ref="GAr_color"/> 
+      <physvol>
+        <volumeref ref="volLAr"/>
+        <positionref ref="posLAr"/>
+        <rotationref ref="identity"/>
+      </physvol>
+      <loop for="index" from="gassipnum" to="10" step="1">
+        <physvol>
+          <volumeref ref="volOpDet[index]"/>
+          <position unit="cm" name="sidpos" x="sidx" y="sidy" z="sidz[index-2]"/>
+        </physvol>
+      </loop>
+    </volume>
+    
+    <volume name="volCage">
+      <materialref ref="steel_stainless"/>
+      <solidref ref="Cage"/>
+      <colorref ref="cage_color"/> 
+      <physvol>
+        <volumeref ref="volGAr"/>
+        <positionref ref="posGAr"/>
+        <rotationref ref="identity"/>
+      </physvol>
+      <loop for="index" from="1" to="2" step="1">
+        <physvol>
+          <volumeref ref="volOpDet[index]"/>
+          <position unit="cm" name="btmpos" x="btmx" y="btmy[index]" z="btmz"/>
+        </physvol>
+      </loop>
+    </volume>
+    
+    <volume name="volTank">
+      <materialref ref="steel_stainless"/>
+      <solidref ref="Tank"/>
+      <colorref ref="tank_color"/> 
+      <physvol>
+        <volumeref ref="volCage"/>
+        <positionref ref="posCage"/>
+        <rotationref ref="identity"/>
+      </physvol>
+    </volume>
+    
+    <volume name="World_volume">
+      <materialref ref="Air"/>
+      <solidref ref="World"/>
+      <physvol>
+        <volumeref ref="volTank"/>
+        <positionref ref="center"/>
+        <rotationref ref="identity"/>
+      </physvol>
+    </volume>
+
+    <bordersurface name="volCage_Interior" surfaceproperty="volCage_Interior">
+        <physvolref ref="volGAr_PV"/>
+        <physvolref ref="volCage_PV"/>
+    </bordersurface>
+    
+  </structure>
+  
+  <setup name="Default" version="0">
+    <world ref="World_volume"/>
+  </setup>
+</gdml>

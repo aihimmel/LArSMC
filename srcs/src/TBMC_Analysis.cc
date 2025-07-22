@@ -15,6 +15,12 @@ TBMC_Analysis::TBMC_Analysis()
     init_y = 0.;
     init_z = 0.;
     init_energy = 0.;
+
+    fin_x = 0.;
+    fin_y = 0.;
+    fin_z = 0.;
+    fin_r_squared = 0.;
+    fin_volume = 0.;
     
     fEventTree  = NULL;
     fTrackTree  = NULL;
@@ -72,6 +78,11 @@ void TBMC_Analysis::EndOfEvent()
 
 void TBMC_Analysis::BeginOfTrack()
 {
+    return;
+}
+
+void TBMC_Analysis::EndOfTrack()
+{
     fTrackTree->Fill();
     return;
 }
@@ -82,7 +93,6 @@ void TBMC_Analysis::Reset()
    fRayleighLength  = 10;
    fLArLevel        = 10;
    fopDetID         = -1;
-   fKillVolName     ="NULL";
    fnAbsorb         = 0;
    fnRayleigh       = 0;
    
@@ -103,7 +113,6 @@ void TBMC_Analysis::bookTree()
     fEventTree  = new TTree("EventTree", "EventTree");
     fTrackTree  = new TTree("TrackTree", "TrackTree");
 
-    fEventTree->Branch("KillVol",    &fKillVolName);
     fEventTree->Branch("Process",    &fProcessName);
     fEventTree->Branch("OpDet",      &fopDetID);
     fEventTree->Branch("Rayleigh",   &fnRayleigh);
@@ -114,16 +123,13 @@ void TBMC_Analysis::bookTree()
     fTrackTree->Branch("InitialY",      &init_y);
     fTrackTree->Branch("InitialZ",      &init_z);
     fTrackTree->Branch("InitialEnergy", &init_energy);
+
+    fTrackTree->Branch("FinalX",      &fin_x);
+    fTrackTree->Branch("FinalY",      &fin_y);
+    fTrackTree->Branch("FinalZ",      &fin_z);
+    fTrackTree->Branch("FinalVolume", &fin_volume);
+    fTrackTree->Branch("Final_R_Sq.", &fin_r_squared);
         
     fOutputFile->cd();
     return;
 }
-
-// MISC.//
-
-// This function can be used to extract end-of-track data when necessary:
-
-// void TBMC_Analysis::EndOfTrack()
-// {
-//     return;
-// }
