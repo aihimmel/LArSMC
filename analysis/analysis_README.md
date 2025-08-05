@@ -8,6 +8,8 @@ The ring-based analysis starts within each of the wavelength-specific directorie
 Find the README file within `~/LArSMC/analysis/larsmc_128nm` for documentation that applies to *all* wavelength-specific directories. 
 Find the README file within `~/LArSMC/analysis/larsmc_all` for documentation on the broad analysis.
 
+**Note:** `~/LArSMC/analysis/larsmc_180nm_ref` is for analysis of simulation data that was ran with the cage beign reflective.
+
 ### BottomRingsPlot.C
 
 This macro creates a visual of the bottom of the cage with rings to help visualize the ring-based analysis.
