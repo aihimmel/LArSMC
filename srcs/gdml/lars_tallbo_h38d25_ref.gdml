@@ -20,8 +20,8 @@
     <matrix coldim="2" name="GARRAYLEIGH"  values="1.0*eV 100.*m 2.0*eV 100.*m 3.0*eV 100.*m 4.0*eV 100.*m 5.0*eV 100.*m 6.0*eV 100.*m 7.0*eV 100.*m 8.0*eV 100.*m 9.0*eV 100.*m 10.0*eV 100.*m 11.0*eV 100.*m"/>
     <matrix coldim="2" name="GARABSLENGTH" values="1.0*eV 100.*m 2.0*eV 100.*m 3.0*eV 100.*m 4.0*eV 100.*m 5.0*eV 100.*m 6.0*eV 100.*m 7.0*eV 100.*m 8.0*eV 100.*m 9.0*eV 100.*m 10.0*eV 100.*m 11.0*eV 100.*m"/>
     <matrix coldim="2" name="MATRINDEX"    values="1.0*eV 1. 2.0*eV 1. 3.0*eV 1. 4.0*eV 1. 5.0*eV 1. 6.0*eV 1. 7.0*eV 1. 8.0*eV 1. 9.0*eV 1. 10.0*eV 1. 11.0*eV 1."/>
-    <matrix coldim="2" name="CAGEREFLECTIVITY" values="9.686*eV 0.75 6.888*eV 0.75"/>
-    <matrix coldim="2" name="CAGEABSORPTION" values="9.686*eV 0.25 6.888*eV 0.25"/>
+    <matrix coldim="2" name="CAGEREFLECTIVITY"  values="20.664*eV 0.01 10.332*eV 0.01 9.919*eV 0.01 9.611*eV 0.01 9.184*eV 0.01 8.856*eV 0.01 8.7*eV 0.01 8.551*eV 0.01 8.266*eV 0.01 7.999*eV 0.01 7.749*eV 0.01 7.514*eV 0.01 7.293*eV 0.01 7.085*eV 0.01 6.888*eV 0.01 6.7*eV 0.01"/>
+    <matrix coldim="2" name="CAGEABSORPTION"  values="20.664*eV 0.99 10.332*eV 0.99 9.919*eV 0.99 9.611*eV 0.99 9.184*eV 0.99 8.856*eV 0.99 8.7*eV 0.99 8.551*eV 0.99 8.266*eV 0.99 7.999*eV 0.99 7.749*eV 0.99 7.514*eV 0.99 7.293*eV 0.99 7.085*eV 0.99 6.888*eV 0.99 6.7*eV 0.99"/>
 
     <variable name="RTank" value="30"/>
     <variable name="HTank" value="170."/>
@@ -203,6 +203,11 @@
     </volume>
 
     <bordersurface name="volCage_Interior" surfaceproperty="volCage_Interior">
+        <physvolref ref="volLAr_PV"/>
+        <physvolref ref="volCage_PV"/>
+    </bordersurface>
+
+    <bordersurface name="volCage_Interior_ii" surfaceproperty="volCage_Interior">
         <physvolref ref="volGAr_PV"/>
         <physvolref ref="volCage_PV"/>
     </bordersurface>

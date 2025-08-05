@@ -1,0 +1,28 @@
+{
+    "files.associations": {
+        "AutoRunMacros_150nm.C": "cpp",
+        "FitPhotonsVsHLAr_150nm.C": "cpp",
+        "GraphPhotonsVsHLAr_150nm.C": "cpp",
+        "HistoPhotonsVsHLAr_150nm.C": "cpp",
+        "MakeClassFiles_150nm.C": "cpp",
+        "MakePDFs_150nm.C": "cpp",
+        "FitPhotonsVsHLAr_180nm.C": "cpp",
+        "Track_h101d83cm_150nm.C": "cpp",
+        "Track_h10d31cm_150nm.C": "cpp",
+        "Track_h127d22cm_150nm.C": "cpp",
+        "Track_h17d93cm_150nm.C": "cpp",
+        "Track_h25d34cm_150nm.C": "cpp",
+        "Track_h28d09cm_150nm.C": "cpp",
+        "Track_h2d22cm_150nm.C": "cpp",
+        "Track_h38d25cm_150nm.C": "cpp",
+        "Track_h40d79cm_150nm.C": "cpp",
+        "Track_h50d97cm_150nm.C": "cpp",
+        "Track_h5d23cm_150nm.C": "cpp",
+        "Track_h63d65cm_150nm.C": "cpp",
+        "Track_h76d33cm_150nm.C": "cpp",
+        "Track_h89d05cm_150nm.C": "cpp",
+        "FitPhotonsVsHLAr_129nm.C": "cpp",
+        "FitPhotonsVsHLAr_60nm.C": "cpp",
+        "Track_h40d79cm_60nm.C": "cpp"
+    }
+}

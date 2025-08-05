@@ -11,6 +11,9 @@ TBMC_Analysis::TBMC_Analysis()
     fRayleighLength  = 10;
     fLArLevel        = 10;
 
+    // StepTracker = 0;
+    // StepTracker2 = 1;
+
     init_x = 0.;
     init_y = 0.;
     init_z = 0.;
@@ -21,6 +24,7 @@ TBMC_Analysis::TBMC_Analysis()
     fin_z = 0.;
     fin_r_squared = 0.;
     fin_volume = 0.;
+    // fin_volume_status = 0;
     
     fEventTree  = NULL;
     fTrackTree  = NULL;

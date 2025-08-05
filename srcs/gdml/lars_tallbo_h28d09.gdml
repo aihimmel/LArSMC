@@ -14,7 +14,7 @@
   </extension>
 
   <define>
-    <matrix coldim="2" name="LARRAYLEIGH"  values="20.664*eV 4.212*cm 10.781*eV 56.8427*cm 10.332*eV 67.392*cm 9.919*eV 79.3458*cm 9.611*eV 90*cm 9.184*eV 107.949*cm 8.856*eV 124.852*cm 8.7*eV 134.012*cm 8.551*eV 143.667*cm 8.266*eV 164.531*cm 7.999*eV 187.59*cm 7.749*eV 212.992*cm 7.514*eV 240.89*cm 7.293*eV 271.443*cm 7.085*eV 304.815*cm 6.888*eV 341.172*cm 6.7*eV 380.689*cm"/>
+    <matrix coldim="2" name="LARRAYLEIGH"  values="20.664*eV 4.212*cm 10.781*eV 56.8427*cm 10.332*eV 67.392*cm 9.919*eV 79.3458*cm 9.686*eV 90*cm 9.184*eV 107.949*cm 8.856*eV 124.852*cm 8.7*eV 134.012*cm 8.551*eV 143.667*cm 8.266*eV 164.531*cm 7.999*eV 187.59*cm 7.749*eV 212.992*cm 7.514*eV 240.89*cm 7.293*eV 271.443*cm 7.085*eV 304.815*cm 6.888*eV 341.172*cm 6.7*eV 380.689*cm"/>
     <matrix coldim="2" name="LARABSLENGTH" values="1.0*eV 100.*m 2.0*eV 100.*m 3.0*eV 100.*m 4.0*eV 100.*m 5.0*eV 100.*m 6.0*eV 100.*m 7.0*eV 100.*m 8.0*eV 100.*m 9.0*eV 100.*m 10.0*eV 100.*m 11.0*eV 100.*m"/>
     <matrix coldim="2" name="LARRINDEX" values="9.686*eV 1.358"/>
     <matrix coldim="2" name="GARRAYLEIGH"  values="1.0*eV 100.*m 2.0*eV 100.*m 3.0*eV 100.*m 4.0*eV 100.*m 5.0*eV 100.*m 6.0*eV 100.*m 7.0*eV 100.*m 8.0*eV 100.*m 9.0*eV 100.*m 10.0*eV 100.*m 11.0*eV 100.*m"/>

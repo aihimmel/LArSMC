@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "MakeClassFiles.C": "cpp",
+        "PlotPhotonsVsR2.C": "cpp",
+        "GraphPhotonsVsR2.C": "cpp",
+        "Track_h101d83cm_180nm.C": "cpp",
+        "FitPhotonsVsHLAr_129nm.C": "cpp",
+        "Track_h2d22cm_129nm.C": "cpp",
+        "HistoPhotonsVsR2_129nm.C": "cpp",
+        "GraphPhotonsVsHLAr_180nm_ref.C": "cpp",
+        "FitPhotonsVsHLAr_180nm_ref.C": "cpp",
+        "MakeClassFiles_129nm.C": "cpp",
+        "Track_h101d83cm_129nm.C": "cpp",
+        "GraphPhotonsVsHLAr_129nm.C": "cpp"
+    }
+}

@@ -37,6 +37,9 @@ public:
   
     std::string fProcessName;
 
+    // G4int StepTracker;
+    // G4int StepTracker2;
+
     G4double init_x;
     G4double init_y;
     G4double init_z;
@@ -47,6 +50,7 @@ public:
     G4double fin_z;
     G4double fin_r_squared;     // This is the r^2 value from the reference point (8.75, 0) in cm
     G4double fin_volume;
+    // G4int fin_volume_status;    // Used in Stepping Action to tell us if the photon was absorbed in the border surface
        
     G4int fopDetID;
     G4int fnAbsorb;

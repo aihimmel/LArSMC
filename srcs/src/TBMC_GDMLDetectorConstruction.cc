@@ -36,6 +36,7 @@ void TBMC_GDMLDetectorConstruction::ReadGDML()
     parser = new G4GDMLParser();
     parser->Read(gdmlFile, false);
     G4VPhysicalVolume *world = parser->GetWorldVolume();
+
     //----- GDML parser makes world invisible, this is a hack to make it visible again...
     G4LogicalVolume *pworldLogical = world->GetLogicalVolume();
     pworldLogical->SetVisAttributes(0);

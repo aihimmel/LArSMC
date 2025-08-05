@@ -68,6 +68,17 @@ void TBMC_SteppingAction::boundaryProc_DoIt(const G4Step* step)
         if(theStatus != Undefined && theStatus != NotAtBoundary &&  theStatus != StepTooSmall)
         {
             fEventAction->AddBoundary();
+
+            // if(theStatus == Absorption && endPoint->GetPhysicalVolume()->GetName() == "volCage_PV")
+            // {
+
+            //     fAna->fStepLength  = step->GetStepLength();;
+            //     fAna->fopDetID     = 9; //It is not detected by any optical detector
+            //     fAna->fin_volume   = 13.;
+
+            //     step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+            //     return;
+            // }
         }
     }
     return;
@@ -114,10 +125,10 @@ void TBMC_SteppingAction::opPhoton_DoIt(const G4Step* step)
     }
 
 
-    if(isVolume("volTank", step) || isVolume("volCage, step"))
+    if(isVolume("volTank", step) || isVolume("volCage", step)) // If you are implementing reflectivity, remove '|| isVolume("volCage", step)' from condition and uncomment code in TBMC_SteppingAction::boundaryProc_DoIt() !!!!
     {
         fAna->fStepLength  = stepLen;
-        fAna->fopDetID     = 9; //It is not detected by any optial detector
+        fAna->fopDetID     = 9; //It is not detected by any optical detector
 
         step->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
         return;
